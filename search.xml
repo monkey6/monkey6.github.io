@@ -140,6 +140,25 @@
 <h4 id="6-5-部署"><a href="#6-5-部署" class="headerlink" title="6.5.部署"></a>6.5.部署</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
 <p>弹框的时候，用户名输入Github用户名，密码输入token</p>
+<h3 id="7-hexo多电脑同步"><a href="#7-hexo多电脑同步" class="headerlink" title="7.hexo多电脑同步"></a>7.hexo多电脑同步</h3><p>参考：<a href="https://blog.csdn.net/K1052176873/article/details/122879462">Hexo在多台电脑上提交和更新</a></p>
+<h4 id="7-1-Github新建私有仓库"><a href="#7-1-Github新建私有仓库" class="headerlink" title="7.1.Github新建私有仓库"></a>7.1.Github新建私有仓库</h4><p><img src="/2023/08/23/Hexo%E5%92%8CGithub%E9%85%8D%E5%90%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230824135632313.png" alt="image-20230824135632313"></p>
+<h4 id="7-2-clone私有仓库"><a href="#7-2-clone私有仓库" class="headerlink" title="7.2.clone私有仓库"></a>7.2.clone私有仓库</h4><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> d:</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/xxxx/hexo.git</span><br></pre></td></tr></table></figure>
+
+<p>clone后，会在D:下创建一个hexo目录，并且里面有一个.git目录</p>
+<p>复制myblog目录下所有文件到此目录下</p>
+<h4 id="7-3-上传所需文件至私有仓库"><a href="#7-3-上传所需文件至私有仓库" class="headerlink" title="7.3.上传所需文件至私有仓库"></a>7.3.上传所需文件至私有仓库</h4><p><img src="/2023/08/23/Hexo%E5%92%8CGithub%E9%85%8D%E5%90%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/image-20230824140848843.png" alt="image-20230824140848843"></p>
+<p>删除所有主题目录的.git目录，不然无法上传</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /d/hexo</span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;hexo source file&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-4-后续写文章"><a href="#7-4-后续写文章" class="headerlink" title="7.4. 后续写文章"></a>7.4. 后续写文章</h4><p>后续写文章需要在此此hexo环境下，本例为&#x2F;d&#x2F;hexo，写完后</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git pull</span><br><span class="line"><span class="comment"># 开始写文章</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;add blog&quot;</span></span><br><span class="line">git push</span><br><span class="line"><span class="comment"># 部署</span></span><br><span class="line">git d -g</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-5-新电脑操作"><a href="#7-5-新电脑操作" class="headerlink" title="7.5.新电脑操作"></a>7.5.新电脑操作</h4><h5 id="7-5-1-clone仓库"><a href="#7-5-1-clone仓库" class="headerlink" title="7.5.1.clone仓库"></a>7.5.1.clone仓库</h5><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /d</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/xxxx/hexo.git</span><br></pre></td></tr></table></figure>
+
+<h5 id="7-5-2-安装npm扩展"><a href="#7-5-2-安装npm扩展" class="headerlink" title="7.5.2.安装npm扩展"></a>7.5.2.安装npm扩展</h5><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /d/hexo</span><br><span class="line">npm install </span><br></pre></td></tr></table></figure>
+
+<h5 id="7-5-3-写文章"><a href="#7-5-3-写文章" class="headerlink" title="7.5.3.写文章"></a>7.5.3.写文章</h5><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git pull</span><br><span class="line"><span class="comment"># 开始写文章</span></span><br><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;add blog&quot;</span></span><br><span class="line">git push</span><br><span class="line"><span class="comment"># 部署</span></span><br><span class="line">git d -g</span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>博客搭建</category>
