@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-M.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-M.png">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"monkey6.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"manual","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="docker版v2ray安装">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker版v2ray安装">
+<meta property="og:url" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="monkey&#39;s blog">
+<meta property="og:description" content="docker版v2ray安装">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230323110843442.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121843667.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121746728.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121211275.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121014442.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085237745.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325130309828.png">
+<meta property="og:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085718252.png">
+<meta property="article:published_time" content="2023-08-24T13:43:45.000Z">
+<meta property="article:modified_time" content="2023-08-25T00:14:58.275Z">
+<meta property="article:author" content="monkey">
+<meta property="article:tag" content="hexo,oracle,编程,代码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230323110843442.png">
+
+<link rel="canonical" href="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>docker版v2ray安装 | monkey's blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">monkey's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">王侯将相宁有种乎？！</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类<span class="badge">2</span></a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">3</span></a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="monkey">
+      <meta itemprop="description" content="欢迎来到我的小天地💜">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="monkey's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          docker版v2ray安装
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-08-24 21:43:45" itemprop="dateCreated datePublished" datetime="2023-08-24T21:43:45+08:00">2023-08-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-08-25 08:14:58" itemprop="dateModified" datetime="2023-08-25T08:14:58+08:00">2023-08-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%AD%94%E6%B3%95%E4%B8%8A%E7%BD%91/" itemprop="url" rel="index"><span itemprop="name">魔法上网</span></a>
+                </span>
+            </span>
+
+          
+            <div class="post-description">docker版v2ray安装</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="1-v2ray简介"><a href="#1-v2ray简介" class="headerlink" title="1.v2ray简介"></a>1.v2ray简介</h3><p>使用v2ray可以很方便的构建代理，理解v2ray的核心是理解v2ray的数据流向，理解了v2ray的流向，配置就简单了</p>
+<p>详细可以参考<a target="_blank" rel="noopener" href="https://www.v2ray.com/">v2ray官方文档</a>，<a target="_blank" rel="noopener" href="https://guide.v2fly.org/basics/vmess.html#%E9%85%8D%E7%BD%AE%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87">新 V2Ray 白话文指南</a>，<a target="_blank" rel="noopener" href="https://github.com/v2fly/v2ray-core">v2ray GitHub</a></p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230323110843442.png" alt="image-20230323110843442"></p>
+<p>浏览器输入<code>www.google.com</code>，然后浏览器以socks协议将数据转化并发送给v2ray客户端（客户端的inbond），之后v2ray客户端（客户端的outbond）以vmess协议将数据转化并发送给v2ray服务器端（服务器端inbond），之后v2ray服务器再将数据解密（vmess协议加密的数据）并发送给目标网站，完成整个请求过程。</p>
+<h3 id="2-docker安装v2ray"><a href="#2-docker安装v2ray" class="headerlink" title="2.docker安装v2ray"></a>2.docker安装v2ray</h3><p>参考:<a target="_blank" rel="noopener" href="https://guide.v2fly.org/app/docker-deploy-v2ray.html">Docker 部署 V2Ray</a></p>
+<p>使用docker-compose部署docker，需要注意的是：</p>
+<ol>
+<li>如果没有指定网络，会默认生成一个$(docker-compose所在目录的网络)_default，参考<a target="_blank" rel="noopener" href="https://titangene.github.io/article/networking-in-docker-compose.html">透過 Docker Compose 設定 network</a></li>
+<li>mkcp协议使用udp传输，因此要绑定udp，如果用tcp，可以不指定</li>
+<li>v2ray 5默认配置文件位置不再是&#x2F;etc&#x2F;v2ray&#x2F;config.json，因此需要加入command</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /data/docker_data</span><br><span class="line"><span class="built_in">mkdir</span> v2ray</span><br><span class="line"><span class="built_in">cd</span> v2ray</span><br><span class="line"><span class="built_in">mkdir</span> <span class="built_in">log</span></span><br><span class="line"><span class="built_in">mkdir</span> config</span><br><span class="line">docker network create all_net</span><br><span class="line">vi docker-compose.yml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">v2ray:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">v2fly/v2fly-core</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">v2ray</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">on-failure:3</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/docker_data/v2ray/config/config.json:/etc/v2ray/config.json</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/docker_data/v2ray/log:/var/log/v2ray</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">&quot;run -config=/etc/v2ray/config.json&quot;</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6038:6038&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;6038:6038/udp&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">default:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">all_net</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br><span class="line">docker-compose logs</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-三种常用配置"><a href="#3-三种常用配置" class="headerlink" title="3.三种常用配置"></a>3.三种常用配置</h3><p><a target="_blank" rel="noopener" href="https://intmainreturn0.com/v2ray-config-gen/">v2ray配置文件在线生成</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/KiriKira/vTemplate">v2ary常用配置模板集合</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.uuidgenerator.net/">UUID生成器</a></p>
+<h4 id="3-4-VMESS-TCP"><a href="#3-4-VMESS-TCP" class="headerlink" title="3.4.VMESS+TCP"></a>3.4.VMESS+TCP</h4><p>服务器端配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;access&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/access.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/error.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;loglevel&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warning&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;inbound&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">12345</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cb76a5c7-51e5-84d1-d0ff-da110e3f3c32&quot;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outbound&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;inboundDetour&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;outboundDetour&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blackhole&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;tag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blocked&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;routing&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;strategy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;rules&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;field&quot;</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;ip&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                        <span class="string">&quot;0.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;10.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;100.64.0.0/10&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;127.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;169.254.0.0/16&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;172.16.0.0/12&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;192.0.0.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;192.0.2.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;192.168.0.0/16&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;198.18.0.0/15&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;198.51.100.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;203.0.113.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;::1/128&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;fc00::/7&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="string">&quot;fe80::/10&quot;</span></span><br><span class="line">                    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                    <span class="attr">&quot;outboundTag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blocked&quot;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>客户端配置：</p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121843667.png" alt="image-20230325121843667"></p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121746728.png" alt="image-20230325121746728"></p>
+<h4 id="3-2-vmess-mkcp"><a href="#3-2-vmess-mkcp" class="headerlink" title="3.2.vmess+mkcp"></a>3.2.vmess+mkcp</h4><p>vmess+mkcp，mkcp对于丢包严重的网络进行了优化，同时可以伪装（BT下载，视频通话），伪装不代表你可以为所欲为，保持个人的判断，对信息有明确的甄别，学习先进的技术才是根本</p>
+<p>服务器端配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;access&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/access.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/error.log&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;loglevel&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warning&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inbound&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">6038</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;4552a7f9-dc8d-a0c9-422f-032ea2a3783f&quot;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">                <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;kcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">                        <span class="attr">&quot;kcpSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;header&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                                        <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;srtp&quot;</span></span><br><span class="line">                                <span class="punctuation">&#125;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;outbound&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;inboundDetour&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;outboundDetour&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blackhole&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;tag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blocked&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;routing&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;strategy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;rules&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;rules&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;field&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;ip&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                                        <span class="string">&quot;0.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;10.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;100.64.0.0/10&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;127.0.0.0/8&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;169.254.0.0/16&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;172.16.0.0/12&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;192.0.0.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;192.0.2.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;192.168.0.0/16&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;198.18.0.0/15&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;198.51.100.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;203.0.113.0/24&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;::1/128&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;fc00::/7&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                        <span class="string">&quot;fe80::/10&quot;</span></span><br><span class="line">                                <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;outboundTag&quot;</span><span class="punctuation">:</span> <span class="string">&quot;blocked&quot;</span></span><br><span class="line">                        <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>客户端配置：</p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121211275.png" alt="image-20230325121211275"></p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325121014442.png" alt="image-20230325121014442"></p>
+<h4 id="3-3-WebSocket-TLS-Web"><a href="#3-3-WebSocket-TLS-Web" class="headerlink" title="3.3.WebSocket+TLS+Web"></a>3.3.WebSocket+TLS+Web</h4><h5 id="3-3-1-配置v2ray"><a href="#3-3-1-配置v2ray" class="headerlink" title="3.3.1.配置v2ray"></a>3.3.1.配置v2ray</h5><p>docker-compose.yml，不再开放端口</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">v2ray:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">v2fly/v2fly-core</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">v2ray</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">on-failure:3</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/docker_data/v2ray/config/config.json:/etc/v2ray/config.json</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">/data/docker_data/v2ray/log:/var/log/v2ray</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">&quot;run -config=/etc/v2ray/config.json&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">default:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">all_net</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>服务器端配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;log&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;access&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/access.log&quot;</span><span class="punctuation">,</span> </span><br><span class="line">        <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/var/log/v2ray/error.log&quot;</span><span class="punctuation">,</span> </span><br><span class="line">        <span class="attr">&quot;loglevel&quot;</span><span class="punctuation">:</span> <span class="string">&quot;warning&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;inbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;port&quot;</span><span class="punctuation">:</span> <span class="number">10000</span><span class="punctuation">,</span>  </span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vmess&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;clients&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                    <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;b831381d-6324-4d53-ad4f-8cda48b30811&quot;</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">]</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="attr">&quot;streamSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;network&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ws&quot;</span><span class="punctuation">,</span> </span><br><span class="line">                <span class="attr">&quot;wsSettings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/ray&quot;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span> </span><br><span class="line">    <span class="attr">&quot;outbounds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;protocol&quot;</span><span class="punctuation">:</span> <span class="string">&quot;freedom&quot;</span><span class="punctuation">,</span> </span><br><span class="line">            <span class="attr">&quot;settings&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span> <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="3-3-2-安装NPM"><a href="#3-3-2-安装NPM" class="headerlink" title="3.3.2.安装NPM"></a>3.3.2.安装NPM</h5><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /data/docker_data</span><br><span class="line"><span class="built_in">mkdir</span> npm</span><br><span class="line"><span class="built_in">cd</span> npm</span><br><span class="line"><span class="built_in">mkdir</span> letsencrypt</span><br><span class="line"><span class="built_in">mkdir</span> data</span><br><span class="line">vi docker-compose.yml</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&#x27;3&#x27;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">&#x27;jc21/nginx-proxy-manager:latest&#x27;</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">npm</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;80:80&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;81:81&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;443:443&#x27;</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./data:/data</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./letsencrypt:/etc/letsencrypt</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">TZ=Asia/Shanghai</span></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">default:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">all_net</span></span><br><span class="line">    <span class="attr">external:</span> <span class="literal">true</span>    </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br><span class="line">docker-compose logs</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-3-3-进入NPM设置"><a href="#3-3-3-进入NPM设置" class="headerlink" title="3.3.3.进入NPM设置"></a>3.3.3.进入NPM设置</h5><p>浏览器输入http:&#x2F;&#x2F;域名:81进入后台管理页面，默认用户名&#x2F;密码为<a href="mailto:&#97;&#100;&#x6d;&#105;&#110;&#64;&#101;&#x78;&#97;&#109;&#112;&#101;&#108;&#46;&#99;&#111;&#x6d;">&#97;&#100;&#x6d;&#105;&#110;&#64;&#101;&#x78;&#97;&#109;&#112;&#101;&#108;&#46;&#99;&#111;&#x6d;</a>&#x2F;changeme，登陆后需要修改密码，建议用密码生成工具生成强密码</p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085237745.png" alt="image-20230326085237745"></p>
+<p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325130309828.png" alt="image-20230325130309828"></p>
+<h5 id="3-3-4-客户端配置"><a href="#3-3-4-客户端配置" class="headerlink" title="3.3.4.客户端配置"></a>3.3.4.客户端配置</h5><p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085718252.png" alt="image-20230326085718252"></p>
+<h5 id="3-3-5-常见异常"><a href="#3-3-5-常见异常" class="headerlink" title="3.3.5. 常见异常"></a>3.3.5. 常见异常</h5><p><code>[Warning] [3354002692] app/proxyman/outbound: failed to process outbound traffic &gt; proxy/vmess/outbound: failed to find an available destination &gt; common/retry: [transport/internet/websocket: failed to dial WebSocket &gt; transport/internet/websocket: failed to dial to (wss://xxx.xxx.top/ray):  &gt; read tcp 192.168.31.95:1523-&gt;xxx.xxx.xxx.xxx:443: wsarecv: An existing connection was forcibly closed by the remote host. </code></p>
+<p>客户端发生上述错误后，查看VPS端NPM日志，发现没有接到任何客户端的请求（说明不是v2ray的错误，因为NPM还没有转发请求）</p>
+<p>客户端配置<code>传输层安全</code>为空后，发现NPM日志接收到了客户端的请求，不过是http的（说明问题发生在https上，要么vps 443端口没开，要么证书有问题）</p>
+<p>经过排查后，发现443端口是开放的，然后NPM重新申请证书，还是不可以，最后更换域名重新申请证书后，问题解决。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>monkey
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://monkey6.github.io/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/" title="docker版v2ray安装">https://monkey6.github.io/2023/08/24/docker版v2ray安装/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/08/23/Hexo%E5%92%8CGithub%E9%85%8D%E5%90%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/" rel="prev" title="Hexo和Github配合搭建个人博客">
+      <i class="fa fa-chevron-left"></i> Hexo和Github配合搭建个人博客
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/" rel="next" title="docker版v2raya安装">
+      docker版v2raya安装 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-v2ray%E7%AE%80%E4%BB%8B"><span class="nav-text">1.v2ray简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-docker%E5%AE%89%E8%A3%85v2ray"><span class="nav-text">2.docker安装v2ray</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%B8%89%E7%A7%8D%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE"><span class="nav-text">3.三种常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-VMESS-TCP"><span class="nav-text">3.4.VMESS+TCP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-vmess-mkcp"><span class="nav-text">3.2.vmess+mkcp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-WebSocket-TLS-Web"><span class="nav-text">3.3.WebSocket+TLS+Web</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-1-%E9%85%8D%E7%BD%AEv2ray"><span class="nav-text">3.3.1.配置v2ray</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-2-%E5%AE%89%E8%A3%85NPM"><span class="nav-text">3.3.2.安装NPM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-3-%E8%BF%9B%E5%85%A5NPM%E8%AE%BE%E7%BD%AE"><span class="nav-text">3.3.3.进入NPM设置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-4-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-text">3.3.4.客户端配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-5-%E5%B8%B8%E8%A7%81%E5%BC%82%E5%B8%B8"><span class="nav-text">3.3.5. 常见异常</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="monkey"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">monkey</p>
+  <div class="site-description" itemprop="description">欢迎来到我的小天地💜</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">monkey</span>
+</div>
+
+<!--
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div> -->
+
+<!-- 网站运行时间的设置 -->
+<span id="timeDate">载入天数...</span>
+<span id="times">载入时分秒...</span>
+<script>
+    var now = new Date();
+    function createtime() {
+        var grt= new Date("08/21/2023 10:00:00"); //此处修改你的建站时间或者网站上线时间
+        now.setTime(now.getTime()+250);
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days);
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours);
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;}
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;}
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 ";
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒.";
+    }
+setInterval("createtime()",250);
+</script>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
