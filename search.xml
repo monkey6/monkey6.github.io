@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>docker版v2raya安装</title>
+    <url>/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>v2ray无论是客户端还是服务器，其实用的都是v2raycore，只是流入流出的方向不同。但其配置比较繁琐，服务器端可以使用<a href="https://intmainreturn0.com/v2ray-config-gen/">v2ray配置生成器</a>来生成配置文件，但是客户端需要考虑分流，节点导入等各种功能，对于新手（即使老手）来说简直地狱难度，好在有大佬开发了客户端，这样就可以在图像化界面下，点点鼠标，输点东西就可以了。</p>
+<p>windows下可以使用<a href="https://github.com/2dust/v2rayN">v2rayN</a>作为客户端，Linux下就可以使用本次介绍的<a href="https://github.com/v2rayA/v2rayA">v2rayA</a>了（当然v2rayA是一个web客户端，基本所有的系统都可以使用）</p>
+<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2.安装"></a>2.安装</h3><p>本次采用docker安装，可以参考<a href="https://v2raya.org/">v2rayA官方文档</a></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /docker/v2raya</span><br><span class="line"><span class="comment"># 不使用全局代理</span></span><br><span class="line">docker run -d \</span><br><span class="line">  -p 2017:2017 \</span><br><span class="line">  -p 20170-20172:20170-20172 \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --name v2raya \</span><br><span class="line">  -e TZ=<span class="string">&quot;Asia/Shanghai&quot;</span> \</span><br><span class="line">  -e V2RAYA_LOG_FILE=/etc/v2raya/v2raya.<span class="built_in">log</span> \     <span class="comment">#这里指定的是容器内日志的位置</span></span><br><span class="line">  -v /docker/v2raya:/etc/v2raya \</span><br><span class="line">  mzz2017/v2raya</span><br><span class="line"><span class="comment"># 使用全局代理</span></span><br><span class="line">docker run -d \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --privileged \</span><br><span class="line">  --network=host \</span><br><span class="line">  --name v2raya \</span><br><span class="line">  -e TZ=<span class="string">&quot;Asia/Shanghai&quot;</span> \</span><br><span class="line">  -e V2RAYA_LOG_FILE=/etc/v2raya/v2raya.<span class="built_in">log</span> \</span><br><span class="line">  -v /lib/modules:/lib/modules:ro \</span><br><span class="line">  -v /etc/resolv.conf:/etc/resolv.conf \</span><br><span class="line">  -v /etc/v2raya:/etc/v2raya \</span><br><span class="line">  mzz2017/v2raya</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3.配置"></a>3.配置</h3><p>v2raya的web端口是2017，因此浏览器输入 你的IP:2017即可进入v2raya的配置页面</p>
+<h4 id="3-1-配置用户"><a href="#3-1-配置用户" class="headerlink" title="3.1.配置用户"></a>3.1.配置用户</h4><p>进入之后，弹出让创建用户，填入用户名和密码（别忘记了，虽然能改，但比较麻烦）</p>
+<h4 id="3-2-配置节点"><a href="#3-2-配置节点" class="headerlink" title="3.2.配置节点"></a>3.2.配置节点</h4><p>节点可以导入，也可以创建。订阅了机场的话，就导入订阅连接，没有机场的话，就创建一个。</p>
+<h4 id="3-3-配置端口分流等"><a href="#3-3-配置端口分流等" class="headerlink" title="3.3.配置端口分流等"></a>3.3.配置端口分流等</h4><p>点击右上角设置</p>
+<p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805194434365.png" alt="image-20230805194434365"></p>
+<p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805194621523.png" alt="image-20230805194621523"></p>
+<h4 id="3-4-启动"><a href="#3-4-启动" class="headerlink" title="3.4.启动"></a>3.4.启动</h4><p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805195041827.png" alt="image-20230805195041827"></p>
+<p>启动后，右上角的启动会变成正在运行</p>
+]]></content>
+      <categories>
+        <category>魔法上网</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Hexo和Github配合搭建个人博客</title>
     <url>/2023/08/23/Hexo%E5%92%8CGithub%E9%85%8D%E5%90%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
     <content><![CDATA[<h3 id="1-软件安装"><a href="#1-软件安装" class="headerlink" title="1.软件安装"></a>1.软件安装</h3><h4 id="1-1-安装Node-js"><a href="#1-1-安装Node-js" class="headerlink" title="1.1.安装Node.js"></a>1.1.安装Node.js</h4><p><a href="https://nodejs.org/en/download">Node.js下载</a></p>
@@ -165,27 +186,6 @@
       </categories>
   </entry>
   <entry>
-    <title>docker版v2raya安装</title>
-    <url>/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1.简介"></a>1.简介</h3><p>v2ray无论是客户端还是服务器，其实用的都是v2raycore，只是流入流出的方向不同。但其配置比较繁琐，服务器端可以使用<a href="https://intmainreturn0.com/v2ray-config-gen/">v2ray配置生成器</a>来生成配置文件，但是客户端需要考虑分流，节点导入等各种功能，对于新手（即使老手）来说简直地狱难度，好在有大佬开发了客户端，这样就可以在图像化界面下，点点鼠标，输点东西就可以了。</p>
-<p>windows下可以使用<a href="https://github.com/2dust/v2rayN">v2rayN</a>作为客户端，Linux下就可以使用本次介绍的<a href="https://github.com/v2rayA/v2rayA">v2rayA</a>了（当然v2rayA是一个web客户端，基本所有的系统都可以使用）</p>
-<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2.安装"></a>2.安装</h3><p>本次采用docker安装，可以参考<a href="https://v2raya.org/">v2rayA官方文档</a></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /docker/v2raya</span><br><span class="line"><span class="comment"># 不使用全局代理</span></span><br><span class="line">docker run -d \</span><br><span class="line">  -p 2017:2017 \</span><br><span class="line">  -p 20170-20172:20170-20172 \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --name v2raya \</span><br><span class="line">  -e TZ=<span class="string">&quot;Asia/Shanghai&quot;</span> \</span><br><span class="line">  -e V2RAYA_LOG_FILE=/etc/v2raya/v2raya.<span class="built_in">log</span> \     <span class="comment">#这里指定的是容器内日志的位置</span></span><br><span class="line">  -v /docker/v2raya:/etc/v2raya \</span><br><span class="line">  mzz2017/v2raya</span><br><span class="line"><span class="comment"># 使用全局代理</span></span><br><span class="line">docker run -d \</span><br><span class="line">  --restart=always \</span><br><span class="line">  --privileged \</span><br><span class="line">  --network=host \</span><br><span class="line">  --name v2raya \</span><br><span class="line">  -e TZ=<span class="string">&quot;Asia/Shanghai&quot;</span> \</span><br><span class="line">  -e V2RAYA_LOG_FILE=/etc/v2raya/v2raya.<span class="built_in">log</span> \</span><br><span class="line">  -v /lib/modules:/lib/modules:ro \</span><br><span class="line">  -v /etc/resolv.conf:/etc/resolv.conf \</span><br><span class="line">  -v /etc/v2raya:/etc/v2raya \</span><br><span class="line">  mzz2017/v2raya</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-配置"><a href="#3-配置" class="headerlink" title="3.配置"></a>3.配置</h3><p>v2raya的web端口是2017，因此浏览器输入 你的IP:2017即可进入v2raya的配置页面</p>
-<h4 id="3-1-配置用户"><a href="#3-1-配置用户" class="headerlink" title="3.1.配置用户"></a>3.1.配置用户</h4><p>进入之后，弹出让创建用户，填入用户名和密码（别忘记了，虽然能改，但比较麻烦）</p>
-<h4 id="3-2-配置节点"><a href="#3-2-配置节点" class="headerlink" title="3.2.配置节点"></a>3.2.配置节点</h4><p>节点可以导入，也可以创建。订阅了机场的话，就导入订阅连接，没有机场的话，就创建一个。</p>
-<h4 id="3-3-配置端口分流等"><a href="#3-3-配置端口分流等" class="headerlink" title="3.3.配置端口分流等"></a>3.3.配置端口分流等</h4><p>点击右上角设置</p>
-<p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805194434365.png" alt="image-20230805194434365"></p>
-<p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805194621523.png" alt="image-20230805194621523"></p>
-<h4 id="3-4-启动"><a href="#3-4-启动" class="headerlink" title="3.4.启动"></a>3.4.启动</h4><p><img src="/2023/08/24/docker%E7%89%88v2raya%E5%AE%89%E8%A3%85/image-20230805195041827.png" alt="image-20230805195041827"></p>
-<p>启动后，右上角的启动会变成正在运行</p>
-]]></content>
-      <categories>
-        <category>魔法上网</category>
-      </categories>
-  </entry>
-  <entry>
     <title>docker版v2ray安装</title>
     <url>/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<h3 id="1-v2ray简介"><a href="#1-v2ray简介" class="headerlink" title="1.v2ray简介"></a>1.v2ray简介</h3><p>使用v2ray可以很方便的构建代理，理解v2ray的核心是理解v2ray的数据流向，理解了v2ray的流向，配置就简单了</p>
@@ -233,7 +233,7 @@
 
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker-compose up -d</span><br><span class="line">docker-compose logs</span><br></pre></td></tr></table></figure>
 
-<h5 id="3-3-3-进入NPM设置"><a href="#3-3-3-进入NPM设置" class="headerlink" title="3.3.3.进入NPM设置"></a>3.3.3.进入NPM设置</h5><p>浏览器输入http:&#x2F;&#x2F;域名:81进入后台管理页面，默认用户名&#x2F;密码为<a href="mailto:&#97;&#100;&#x6d;&#105;&#110;&#64;&#101;&#x78;&#97;&#109;&#112;&#101;&#108;&#46;&#99;&#111;&#x6d;">&#97;&#100;&#x6d;&#105;&#110;&#64;&#101;&#x78;&#97;&#109;&#112;&#101;&#108;&#46;&#99;&#111;&#x6d;</a>&#x2F;changeme，登陆后需要修改密码，建议用密码生成工具生成强密码</p>
+<h5 id="3-3-3-进入NPM设置"><a href="#3-3-3-进入NPM设置" class="headerlink" title="3.3.3.进入NPM设置"></a>3.3.3.进入NPM设置</h5><p>浏览器输入http:&#x2F;&#x2F;域名:81进入后台管理页面，默认用户名&#x2F;密码为<a href="mailto:&#97;&#100;&#109;&#105;&#x6e;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x65;&#108;&#x2e;&#99;&#111;&#109;">&#97;&#100;&#109;&#105;&#x6e;&#64;&#101;&#x78;&#x61;&#109;&#x70;&#x65;&#108;&#x2e;&#99;&#111;&#109;</a>&#x2F;changeme，登陆后需要修改密码，建议用密码生成工具生成强密码</p>
 <p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085237745.png" alt="image-20230326085237745"></p>
 <p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230325130309828.png" alt="image-20230325130309828"></p>
 <h5 id="3-3-4-客户端配置"><a href="#3-3-4-客户端配置" class="headerlink" title="3.3.4.客户端配置"></a>3.3.4.客户端配置</h5><p><img src="/2023/08/24/docker%E7%89%88v2ray%E5%AE%89%E8%A3%85/image-20230326085718252.png" alt="image-20230326085718252"></p>
